@@ -7,7 +7,7 @@
 ```
 bigdata-ai-course/
 ├── README.md          # 仓库说明
-├── notes/             # 学习笔记
+├── notes/             # 学习笔记（同时也在 -python- 仓库放了核心笔记给老师检查）
 ├── homework/          # 作业
 ├── projects/          # 课程项目
 └── code/              # 示例代码
