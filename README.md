@@ -10,8 +10,13 @@ bigdata-ai-course/
 ├── .gitignore                   # Git 忽略规则
 │
 ├── .workbuddy/skills/           # ⭐ WorkBuddy 官方技能包（老师检查重点）
-│   └── agent-skill-101/         # Agent Skill 入门技能
-│       ├── SKILL.md             # 技能说明书（核心）
+│   ├── concept-learner/         # 层层递进式刷题技能（核心作业）
+│   │   ├── SKILL.md             # 技能说明书
+│   │   └── scripts/
+│   │       └── skill.py         # 刷题程序（5关20题，可运行）
+│   │
+│   └── agent-skill-101/         # Agent Skill 概念讲解技能
+│       ├── SKILL.md             # 技能说明书
 │       ├── assets/              # 资源文件
 │       └── references/          # 参考资料
 │
@@ -23,7 +28,6 @@ bigdata-ai-course/
 │   └── agent-skill-一分钟速通.html
 │
 ├── code/                        # 代码与示例
-│   ├── skill.py                 # 层层递进刷题程序（5关20题）
 │   └── hello.py                 # 入门示例
 │
 ├── homework/                    # 作业（待填充）
@@ -37,6 +41,12 @@ bigdata-ai-course/
 | Python | 3.12.10 |
 | Git | 2.55.0 |
 | VS Code | 1.136.0 |
+
+## 🚀 运行刷题技能
+
+```bash
+python .workbuddy/skills/concept-learner/scripts/skill.py
+```
 
 ## 📚 课程内容
 
@@ -52,4 +62,4 @@ bigdata-ai-course/
 |------|------|
 | 2026-09-03 | 初始化仓库，配置开发环境 |
 | 2026-09-05 | 学习 Agent Skill，写一分钟速通笔记 + 测试题 |
-| 2026-09-10 | 整理仓库结构，添加规范 WorkBuddy Skill 包 |
+| 2026-09-10 | 整理仓库结构，添加规范 WorkBuddy Skill 包（concept-learner + agent-skill-101） |
