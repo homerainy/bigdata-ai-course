@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>一分钟掌握 Agent Skill 核心知识</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;color:#222}
+  .container{max-width:900px;margin:0 auto}
+  .card{background:#fff;border-radius:16px;padding:30px;margin-bottom:20px;box-shadow:0 10px 40px rgba(0,0,0,0.15)}
+  h1{font-size:28px;color:#5a4fcf;margin-bottom:10px;text-align:center}
+  h2{font-size:22px;color:#5a4fcf;margin:25px 0 15px;padding-bottom:8px;border-bottom:3px solid #f0edff}
+  h3{font-size:18px;color:#7a6fdf;margin:15px 0 10px}
+  .subtitle{text-align:center;color:#888;margin-bottom:25px;font-size:14px}
+  .timer{position:fixed;top:20px;right:20px;background:#ff4757;color:#fff;padding:10px 18px;border-radius:30px;font-weight:bold;box-shadow:0 4px 15px rgba(255,71,87,0.4);z-index:100}
+  .core-box{background:linear-gradient(135deg,#f6f4ff,#fef6ff);border-left:5px solid #5a4fcf;padding:15px 20px;border-radius:8px;margin:15px 0}
+  .tag{display:inline-block;background:#5a4fcf;color:#fff;padding:3px 12px;border-radius:12px;font-size:12px;margin-right:6px}
+  .tag.green{background:#27ae60}
+  .tag.orange{background:#e67e22}
+  .tag.blue{background:#3498db}
+  ul{padding-left:22px;line-height:1.9}
+  li{margin-bottom:8px}
+  .highlight{background:#fff3a3;padding:1px 4px;border-radius:3px}
+  .tree{background:#1e1e2e;color:#cdd6f4;padding:20px;border-radius:10px;font-family:Consolas,monospace;font-size:13px;overflow-x:auto;margin:15px 0;line-height:1.7}
+  .tree .folder{color:#f9e2af}
+  .tree .file{color:#89b4fa}
+  .tree .key{color:#f38ba8}
+  .tree .val{color:#a6e3a1}
+  .tree .comment{color:#6c7086;font-style:italic}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0}
+  .compare>div{background:#f8f9fa;padding:15px;border-radius:8px;border-top:4px solid #5a4fcf}
+  .compare>div:last-child{border-top-color:#e67e22}
+  .compare h4{color:#5a4fcf;margin-bottom:8px}
+  .compare h4:last-child{color:#e67e22}
+  .quiz-item{padding:15px;margin:12px 0;background:#f8f9fa;border-radius:10px;border-left:4px solid #5a4fcf}
+  .quiz-item .question{font-weight:bold;margin-bottom:10px;color:#333}
+  .quiz-item label{display:block;padding:8px 12px;margin:4px 0;background:#fff;border-radius:6px;cursor:pointer;transition:all .2s}
+  .quiz-item label:hover{background:#ede8ff;transform:translateX(4px)}
+  .quiz-item input{margin-right:8px}
+  .quiz-item .feedback{display:none;margin-top:10px;padding:10px;border-radius:6px;font-size:14px}
+  .quiz-item.correct .feedback.show{display:block;background:#d4edda;color:#155724}
+  .quiz-item.wrong .feedback.show{display:block;background:#f8d7da;color:#721c24}
+  .check-btn{background:#5a4fcf;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;margin-top:8px;font-size:13px;transition:.2s}
+  .check-btn:hover{background:#7a6fdf}
+  .progress{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:8px}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#5a4fcf,#27ae60);transition:width .3s;width:0}
+  .summary{background:linear-gradient(135deg,#fff3a3,#ffeaa7);padding:20px;border-radius:10px;text-align:center;margin-top:15px;font-weight:bold;font-size:18px}
+  .btn-group{text-align:center;margin-top:15px}
+  .btn-group button{background:#5a4fcf;color:#fff;border:none;padding:10px 24px;border-radius:24px;cursor:pointer;margin:0 6px;font-size:14px}
+  .btn-group button:hover{background:#7a6fdf}
+  .btn-group .reset{background:#e67e22}
+  .emoji{font-size:18px}
+</style>
+</head>
+<body>
+<div class="timer" id="timer">⏱ 60</div>
+<div class="container">
+
+<!-- ============== 核心知识点 ============== -->
+<div class="card">
+  <h1>🚀 一分钟掌握 Agent Skill</h1>
+  <p class="subtitle">AI 智能体的「能力插件」系统 · 5 段话讲清核心</p>
+
+  <h2>1️⃣ 一句话理解 Skill</h2>
+  <div class="core-box">
+    <strong>Skill（技能）</strong> = 一个<strong>告诉 AI 怎么干某件事</strong>的指令包。<br>
+    它不是代码工具，而是一份<strong>「专业操作手册」</strong>。<br>
+    想象一下：你雇了一个万能助理，给他一份《财务报销流程手册》，他就懂怎么帮你报销——这就是 Skill。
+  </div>
+
+  <h2>2️⃣ Skill 长什么样？</h2>
+  <p>标准结构（一个文件夹 + 一个 <code class="highlight">SKILL.md</code>）：</p>
+  <div class="tree">
+<span class="comment"># my-finance-skill/</span>
+<span class="folder">├── <span class="key">SKILL.md</span></span>           <span class="comment"># 必填：技能说明书（核心）</span>
+<span class="folder">├── <span class="folder">scripts/</span></span>          <span class="comment"># 可选：辅助脚本</span>
+<span class="folder">│   └── <span class="file">analyze.py</span></span>
+<span class="folder">├── <span class="folder">references/</span></span>       <span class="comment"># 可选：参考资料</span>
+<span class="folder">└── <span class="folder">assets/</span></span>           <span class="comment"># 可选：图标/模板等</span>
+  </div>
+
+  <h2>3️⃣ <span style="color:#ff4757">SKILL.md</span> 的关键三段</h2>
+  <ul>
+    <li>📌 <strong>YAML 元信息</strong>（最顶部）：<code>name</code> + <code>description</code>，决定 AI 何时调用它</li>
+    <li>📋 <strong>触发词</strong>：用户说什么关键词时会激活，比如「翻译」「查询天气」</li>
+    <li>📖 <strong>操作指令</strong>：明确告诉 AI 一步步怎么做、输出什么格式</li>
+  </ul>
+
+  <h2>4️⃣ Skill vs 普通插件 vs Tool</h2>
+  <div class="compare">
+    <div>
+      <h4>Skill</h4>
+      <ul style="padding-left:18px;font-size:14px">
+        <li>📄 主要是<strong>提示词</strong></li>
+        <li>🧠 教 AI <strong>怎么做</strong></li>
+        <li>⚡ 加载即生效</li>
+      </ul>
+    </div>
+    <div>
+      <h4>普通插件/Tool</h4>
+      <ul style="padding-left:18px;font-size:14px">
+        <li>🔧 主要是<strong>代码能力</strong></li>
+        <li>🛠 给 AI <strong>新工具</strong></li>
+        <li>🐢 需要逐次调用</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>5️⃣ 实战场景（你能马上用上的）</h2>
+  <ul>
+    <li>📚 <span class="tag green">学习</span>「日语五十音速查 skill」：问「ま行的假名」秒答</li>
+    <li>💼 <span class="tag blue">工作</span>「周报生成 skill」：告诉它本周事项，自动输出周报模板</li>
+    <li>💻 <span class="tag orange">开发</span>「代码审查 skill」：给它 PR diff，按团队规范出审查意见</li>
+    <li>🎓 <span class="tag">课程</span>「刷题 skill」：就是你之前做的 5 关递进刷题程序</li>
+  </ul>
+
+  <div class="core-box" style="background:linear-gradient(135deg,#d4edda,#c3e6cb);border-left-color:#27ae60">
+    <strong>🎯 一句话总结：</strong>Skill = 把「你的经验 / 流程 / 偏好」沉淀下来，下次直接复用，AI 不用每次重新学。
+  </div>
+</div>
+
+<!-- ============== 测试题 ============== -->
+<div class="card">
+  <h1>📝 自我检测（5 题 · 必做）</h1>
+  <p class="subtitle">检验你是否真的 1 分钟掌握核心</p>
+
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  <p style="text-align:right;font-size:13px;color:#888;margin-top:4px">已答：<span id="answered">0</span> / 5</p>
+
+  <div class="quiz-item" data-correct="B" id="q1">
+    <div class="question">1. Skill 的核心本质是什么？</div>
+    <label><input type="radio" name="q1" value="A"> A. 一段可执行的 Python 代码</label>
+    <label><input type="radio" name="q1" value="B"> B. 一份「教 AI 怎么做事」的操作手册</label>
+    <label><input type="radio" name="q1" value="C"> C. 一个网页 UI 界面</label>
+    <label><input type="radio" name="q1" value="D"> D. 一组数据库表结构</label>
+    <div class="feedback">✅ 正确！Skill 的本质就是一份结构化的操作指令 / 提示词包。</div>
+  </div>
+
+  <div class="quiz-item" data-correct="A" id="q2">
+    <div class="question">2. 一个标准 Skill 文件夹中，哪个文件是核心（必填）？</div>
+    <label><input type="radio" name="q2" value="A"> A. SKILL.md</label>
+    <label><input type="radio" name="q2" value="B"> B. README.md</label>
+    <label><input type="radio" name="q2" value="C"> C. package.json</label>
+    <label><input type="radio" name="q2" value="D"> D. main.py</label>
+    <div class="feedback">✅ 正确！SKILL.md 是 Skill 的灵魂，所有指令都写在这里。</div>
+  </div>
+
+  <div class="quiz-item" data-correct="C" id="q3">
+    <div class="question">3. SKILL.md 最顶部的 YAML 元信息里，最关键的两个字段是？</div>
+    <label><input type="radio" name="q3" value="A"> A. version + author</label>
+    <label><input type="radio" name="q3" value="B"> B. created + updated</label>
+    <label><input type="radio" name="q3" value="C"> C. name + description</label>
+    <label><input type="radio" name="q3" value="D"> D. tags + category</label>
+    <div class="feedback">✅ 正确！name 是技能名，description 决定 AI 在什么场景下会激活它。</div>
+  </div>
+
+  <div class="quiz-item" data-correct="D" id="q4">
+    <div class="question">4. Skill 和普通 Tool/插件最大的区别是？</div>
+    <label><input type="radio" name="q4" value="A"> A. Skill 需要付费，Tool 免费</label>
+    <label><input type="radio" name="q4" value="B"> B. Skill 只能用 Python 写</label>
+    <label><input type="radio" name="q4" value="C"> C. Tool 只能联网，Skill 不能</label>
+    <label><input type="radio" name="q4" value="D"> D. Skill 主要是「提示词/经验」，Tool 主要是「代码能力」</label>
+    <div class="feedback">✅ 正确！这是最本质区别——Skill 沉淀的是<strong>经验流程</strong>，Tool 提供的是<strong>新能力</strong>。</div>
+  </div>
+
+  <div class="quiz-item" data-correct="B" id="q5">
+    <div class="question">5. 下列哪个场景<strong>最适合</strong>用 Skill 实现？</div>
+    <label><input type="radio" name="q5" value="A"> A. 调用摄像头拍照</label>
+    <label><input type="radio" name="q5" value="B"> B. 把团队「代码审查规范」沉淀下来，AI 按规范审 PR</label>
+    <label><input type="radio" name="q5" value="C"> C. 连接 MySQL 执行 SQL</label>
+    <label><input type="radio" name="q5" value="D"> D. 操作 Excel 文件</label>
+    <div class="feedback">✅ 正确！B 是「经验/流程沉淀」的典型场景，最适合用 Skill 实现。A/C/D 都需要真实代码能力，更适合用 Tool。</div>
+  </div>
+
+  <div class="btn-group">
+    <button onclick="checkAll()">✅ 提交答案</button>
+    <button class="reset" onclick="resetQuiz()">🔄 重做</button>
+  </div>
+
+  <div id="summary" class="summary" style="display:none"></div>
+</div>
+
+<div class="card" style="text-align:center;background:linear-gradient(135deg,#fff3a3,#ffeaa7)">
+  <h3>🌟 学完这一分钟你已掌握</h3>
+  <p>✅ Skill 的本质 · ✅ 文件结构 · ✅ SKILL.md 三段 · ✅ 与 Tool 的区别 · ✅ 5 个实战场景</p>
+  <p style="margin-top:8px;color:#666;font-size:14px">下一步：动手写一个属于自己的 Skill！</p>
+</div>
+
+</div>
+
+<script>
+const TOTAL = 5;
+const timerEl = document.getElementById('timer');
+let left = 60;
+const tick = setInterval(()=>{left--;timerEl.textContent='⏱ '+left;if(left<=10){timerEl.style.background='#ff6b81'}if(left<=0){clearInterval(tick);timerEl.textContent='⏱ 时间到';}},1000);
+
+// 实时统计已答题数
+document.querySelectorAll('.quiz-item input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    const answered = new Set();
+    document.querySelectorAll('.quiz-item input:checked').forEach(c=>answered.add(c.name));
+    document.getElementById('answered').textContent = answered.size;
+    document.getElementById('progressBar').style.width = (answered.size/TOTAL*100)+'%';
+  });
+});
+
+function checkAll(){
+  let correct = 0;
+  document.querySelectorAll('.quiz-item').forEach(item=>{
+    const ans = item.querySelector('input:checked');
+    item.classList.remove('correct','wrong');
+    if(!ans){
+      item.classList.add('wrong');
+      item.querySelector('.feedback').classList.add('show');
+      item.querySelector('.feedback').textContent = '⚠️ 这题没答，正确答案是：'+item.dataset.correct;
+      item.querySelector('.feedback').style.display='block';
+      item.querySelector('.feedback').style.background='#fff3cd';
+      item.querySelector('.feedback').style.color='#856404';
+      return;
+    }
+    if(ans.value === item.dataset.correct){
+      correct++; item.classList.add('correct');
+    } else {
+      item.classList.add('wrong');
+    }
+    item.querySelector('.feedback').classList.add('show');
+    item.querySelector('.feedback').style.display='block';
+  });
+  const summary = document.getElementById('summary');
+  summary.style.display='block';
+  let emoji = correct===TOTAL?'🏆 满分通关！':correct>=4?'🎉 优秀！':correct>=3?'👍 还行':'💪 加油';
+  let msg = correct===TOTAL?'你已经 1 分钟真正掌握了核心要点':correct>=3?'核心都掌握了，建议再回顾错的题':'建议重读「核心知识点」部分';
+  summary.innerHTML = `<div class="emoji">${emoji}</div>得分：${correct} / ${TOTAL}<br><span style="font-size:14px;color:#666;font-weight:normal">${msg}</span>`;
+}
+
+function resetQuiz(){
+  document.querySelectorAll('.quiz-item input').forEach(i=>i.checked=false);
+  document.querySelectorAll('.quiz-item').forEach(i=>{i.classList.remove('correct','wrong');i.querySelector('.feedback').classList.remove('show');i.querySelector('.feedback').style.display='';i.querySelector('.feedback').textContent='✅ 正确！Skill 的本质就是一份结构化的操作指令 / 提示词包。'});
+  // 重置第1题 feedback 文本
+  const feedbacks = ['✅ 正确！Skill 的本质就是一份结构化的操作指令 / 提示词包。',
+                     '✅ 正确！SKILL.md 是 Skill 的灵魂，所有指令都写在这里。',
+                     '✅ 正确！name 是技能名，description 决定 AI 在什么场景下会激活它。',
+                     '✅ 正确！这是最本质区别——Skill 沉淀的是<strong>经验流程</strong>，Tool 提供的是<strong>新能力</strong>。',
+                     '✅ 正确！B 是「经验/流程沉淀」的典型场景，最适合用 Skill 实现。A/C/D 都需要真实代码能力，更适合用 Tool。'];
+  document.querySelectorAll('.quiz-item .feedback').forEach((f,i)=>f.innerHTML=feedbacks[i]);
+  document.getElementById('summary').style.display='none';
+  document.getElementById('answered').textContent='0';
+  document.getElementById('progressBar').style.width='0';
+}
+</script>
+</body>
+</html>

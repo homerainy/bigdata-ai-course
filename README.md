@@ -6,11 +6,21 @@
 
 ```
 bigdata-ai-course/
-├── README.md          # 仓库说明
-├── notes/             # 学习笔记（同时也在 -python- 仓库放了核心笔记给老师检查）
-├── homework/          # 作业
-├── projects/          # 课程项目
-└── code/              # 示例代码
+├── README.md                              # 仓库说明
+├── .gitignore
+├── hello.py                               # 入门示例
+├── agent-skill-guide.html               # Agent Skill 可视化学习页
+├── GIT_CHEATSHEET.md                    # Git 命令速查
+├── .workbuddy/
+│   └── skills/
+│       └── agent-skill-101/             # WorkBuddy 官方 Skill 包
+│           ├── SKILL.md                 # 技能说明书（核心）
+│           ├── assets/                  # 资源文件
+│           └── references/              # 参考资料
+├── notes/                               # 学习笔记
+├── homework/                            # 作业（含 skill.py）
+├── projects/                            # 课程项目
+└── code/                                # 示例代码
 ```
 
 ## 环境配置
