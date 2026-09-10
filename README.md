@@ -10,15 +10,19 @@ bigdata-ai-course/
 ├── .gitignore                   # Git 忽略规则
 │
 ├── .workbuddy/skills/           # ⭐ WorkBuddy 官方技能包（老师检查重点）
-│   ├── concept-learner/         # 层层递进式刷题技能（核心作业）
-│   │   ├── SKILL.md             # 技能说明书
-│   │   └── scripts/
-│   │       └── skill.py         # 刷题程序（5关20题，可运行）
+│   ├── concept-learning-generator/   # 概念学习资料生成器（核心作业）
+│   │   ├── SKILL.md                  # 技能说明书
+│   │   ├── assets/                   # 资源文件
+│   │   └── references/               # 参考资料
 │   │
-│   └── agent-skill-101/         # Agent Skill 概念讲解技能
-│       ├── SKILL.md             # 技能说明书
-│       ├── assets/              # 资源文件
-│       └── references/          # 参考资料
+│   ├── concept-learner/              # 层层递进式刷题技能
+│   │   ├── SKILL.md
+│   │   └── scripts/skill.py          # 5关20题
+│   │
+│   └── agent-skill-101/              # Agent Skill 概念讲解
+│       ├── SKILL.md
+│       ├── assets/
+│       └── references/
 │
 ├── docs/                        # 文档资料
 │   ├── GIT_CHEATSHEET.md        # Git 命令速查表
@@ -42,9 +46,12 @@ bigdata-ai-course/
 | Git | 2.55.0 |
 | VS Code | 1.136.0 |
 
-## 🚀 运行刷题技能
+## 🚀 运行示例
 
 ```bash
+# 概念学习资料生成器（WorkBuddy 自动调用 SKILL.md）
+
+# 刷题程序
 python .workbuddy/skills/concept-learner/scripts/skill.py
 ```
 
@@ -62,4 +69,4 @@ python .workbuddy/skills/concept-learner/scripts/skill.py
 |------|------|
 | 2026-09-03 | 初始化仓库，配置开发环境 |
 | 2026-09-05 | 学习 Agent Skill，写一分钟速通笔记 + 测试题 |
-| 2026-09-10 | 整理仓库结构，添加规范 WorkBuddy Skill 包（concept-learner + agent-skill-101） |
+| 2026-09-10 | 添加 concept-learning-generator 概念学习资料生成器 Skill（核心作业） |
