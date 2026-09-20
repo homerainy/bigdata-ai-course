@@ -18,6 +18,7 @@ agent_created: true
 | 已是仓库，但没配 remote | 阶段 5 起 |
 | 已是仓库且有 remote，只是有新改动要传 | 阶段 7 |
 | `git push` 报错，要排障 | 直接读 `references/troubleshooting.md` |
+| `git push` 报网络错误（超时 / 代理 502 / 连接重置） | 先读 `references/troubleshooting.md` 第八节；若只有 `github.com` 不通而 `api.github.com` 通，用 `scripts/gh_api_push.py` 绕行 |
 
 ## 铁律
 
@@ -198,5 +199,6 @@ git push
 ## 附带资源
 
 - `scripts/git_preflight.py` —— 推送前体检脚本，只读，纯标准库，无第三方依赖
+- `scripts/gh_api_push.py` —— `github.com` 连不通时的绕行：改用 GitHub Git Data API 推送。逐字段复刻本地提交，远端 commit SHA 与本地完全一致，不会分叉；凭证按「URL 内嵌 → 凭证管理器 → `GITHUB_TOKEN`」顺序获取，脚本不保存密钥
 - `references/troubleshooting.md` —— 认证失败、推送被拒、大文件超限、Windows 换行符等报错速查
 - `assets/gitignore-python.txt` —— Python / Jupyter 项目 `.gitignore` 模板

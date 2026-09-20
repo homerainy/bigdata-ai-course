@@ -211,6 +211,34 @@ git config --global --unset http.proxy
 ```
 GitHub 直连不稳定时，也可改用 Gitee 作为远程，或走 SSH 的 443 端口。
 
+### 代理报 `CONNECT tunnel failed, response 502` —— github.com 彻底不通
+
+先分清是「全都不通」还是「只有 github.com 不通」：
+
+```bash
+curl -s -o /dev/null -w "github.com     %{http_code}\n" https://github.com
+curl -s -o /dev/null -w "api.github.com %{http_code}\n" https://api.github.com
+```
+
+如果**前者挂、后者通**：git 协议（push / fetch / ls-remote）全都走不通，
+但 REST API 是通的 —— 可以绕行：
+
+```bash
+python "C:/.../scripts/gh_api_push.py" "C:/path/to/项目" origin
+```
+
+它用 Git Data API 把本地提交写进远程（`blobs → trees → commits → PATCH refs`），
+并**逐字段复刻本地提交**（tree / parent / author / committer / message 全照搬），
+因此远端 commit SHA 与本地**完全相同**，推完不会分叉，不需要 fetch / reset / rebase。
+
+> 自己实现时最容易踩的坑：建 tree 时 `base_tree` 必须是**父提交的 tree**
+> （远端已有的对象）。传成本次的最终 tree 会报
+> `422 base_tree is not a valid tree oid`。
+
+**这不是长久之计**：拉取他人提交、看远程历史仍需 `git fetch`。先用它把提交送上去保住进度，
+网络恢复后再正常 `git push`。该脚本只处理「新增 / 修改 / 删除文件」的普通提交，
+**不处理合并提交、标签、Git LFS、以及需要重建大对象的场景**。
+
 ---
 
 ## 九、通用排查顺序
