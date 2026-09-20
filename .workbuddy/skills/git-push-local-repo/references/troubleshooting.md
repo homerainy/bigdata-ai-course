@@ -61,6 +61,36 @@ git pull --rebase origin main            # 先把远程内容拉下来并置于�
 git push -u origin main
 ```
 
+### ⚠️ remote 地址里内嵌了明文 token（`.git/config` 泄露凭证）
+
+若 `git remote -v` 显示 `https://用户名:ghp_xxxx@github.com/...`，说明 token / 密码
+**明文存在 `.git/config`** —— 同步网盘、备份、恶意软件，或任何能读到该目录的人都能直接拿到写权限。
+
+正确做法是交给凭证管理器保存，URL 保持干净：
+
+```bash
+# 1. 先把凭据交给系统凭证管理器（GCM 会存进 Windows 凭据管理器，加密存储）
+printf 'protocol=https\nhost=github.com\nusername=<用户名>\npassword=<token>\n\n' | git credential approve
+
+# 2. 确认能自动取回（应输出 username= 与 password=）
+printf 'protocol=https\nhost=github.com\n\n' | git credential fill
+
+# 3. 只有第 2 步成功，才清洗 URL
+git remote set-url origin https://github.com/<用户名>/<仓库>.git
+```
+
+**两个必须注意的点：**
+
+1. **第 3 步一定要在第 2 步成功之后再做。** 若凭证管理器取不回来就清洗了 URL，
+   会陷入「URL 里没凭据、管理器里也没有」的死局，推送彻底做不了。
+2. **网络不通时 GCM 会卡住**（它要联网做 provider 校验），`git credential approve` /
+   `fill` 都可能长时间无响应（`curl`/`timeout` 报 124 = 超时）。此时**先别迁移**，
+   等网络正常再操作。
+
+**已经泄露了怎么办**：清洗 URL 只是止血，不等于凭证安全。
+**必须去 GitHub → Settings → Developer settings → Personal access tokens 把那个 token
+作废并重新生成**，再用新 token 更新本地凭据。
+
 ---
 
 ## 三、推送被拒类
