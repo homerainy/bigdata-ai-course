@@ -19,10 +19,16 @@ bigdata-ai-course/
 │   │   ├── SKILL.md
 │   │   └── scripts/skill.py          # 5关20题
 │   │
-│   └── agent-skill-101/              # Agent Skill 概念讲解
-│       ├── SKILL.md
-│       ├── assets/
-│       └── references/
+│   ├── agent-skill-101/              # Agent Skill 概念讲解
+│   │   ├── SKILL.md
+│   │   ├── assets/
+│   │   └── references/
+│   │
+│   └── git-push-local-repo/          # 推送本地仓库到远程（2026-09-20）
+│       ├── SKILL.md                  # 七阶段推送流程
+│       ├── scripts/git_preflight.py  # 推送前体检脚本（只读，不修改文件）
+│       ├── references/               # 认证失败/推送被拒等报错速查
+│       └── assets/                   # .gitignore 模板
 │
 ├── docs/                        # 文档资料
 │   ├── GIT_CHEATSHEET.md        # Git 命令速查表
@@ -53,6 +59,9 @@ bigdata-ai-course/
 
 # 刷题程序
 python .workbuddy/skills/concept-learner/scripts/skill.py
+
+# 推送前体检（只读，不修改任何文件）
+python .workbuddy/skills/git-push-local-repo/scripts/git_preflight.py .
 ```
 
 ## 📚 课程内容
@@ -70,3 +79,4 @@ python .workbuddy/skills/concept-learner/scripts/skill.py
 | 2026-09-03 | 初始化仓库，配置开发环境 |
 | 2026-09-05 | 学习 Agent Skill，写一分钟速通笔记 + 测试题 |
 | 2026-09-10 | 添加 concept-learning-generator 概念学习资料生成器 Skill（核心作业） |
+| 2026-09-20 | 添加 git-push-local-repo 推送本地仓库技能（含推送前体检脚本） |

@@ -1,0 +1,76 @@
+# Python 项目 .gitignore 模板
+# 用法：复制到项目根目录，改名为 .gitignore
+# 说明：越早添加越好 —— .gitignore 对「已被 git 跟踪」的文件无效，那时要额外用 git rm --cached 处理
+
+# ---------- 虚拟环境（最重要）----------
+.venv/
+.venv_*/
+venv/
+env/
+ENV/
+
+# ---------- Python 缓存与编译产物 ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ---------- 测试与检查工具缓存 ----------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ---------- Jupyter ----------
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# ---------- 编辑器与操作系统 ----------
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- 密钥与凭据（务必忽略，勿删）----------
+.env
+.env.*
+*.key
+*.pem
+*.p12
+id_rsa*
+id_ed25519*
+.netrc
+*credential*
+*secret*
+*token*
+
+# ---------- 日志与临时文件 ----------
+*.log
+*.tmp
+logs/
+
+# ---------- 数据与模型（大文件慎提交，按需启用）----------
+# GitHub 单文件上限 100MB，数据集/权重文件通常远超此值
+# *.csv
+# *.xlsx
+# *.pkl
+# *.h5
+# *.pt
+# *.pth
+# *.onnx
+# *.safetensors
+# data/
+# models/
+# 需要版本管理的大文件请改用 Git LFS:
+#   git lfs install && git lfs track "*.pth"
