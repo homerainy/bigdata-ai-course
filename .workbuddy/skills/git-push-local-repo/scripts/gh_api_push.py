@@ -44,8 +44,12 @@ MODE_FILE = "100644"
 
 
 def git(args, cwd, binary=False):
+    # 显式用 UTF-8 解码：git 输出的路径与提交信息都是 UTF-8，
+    # 若走系统默认编码（中文 Windows 是 cp936），含中文的内容会乱码
     p = subprocess.run(["git"] + args, cwd=cwd, capture_output=True,
-                       text=not binary)
+                       text=not binary,
+                       encoding=None if binary else "utf-8",
+                       errors=None if binary else "replace")
     if p.returncode != 0:
         err = p.stderr.decode("utf-8", "replace") if binary else p.stderr
         raise SystemExit("git %s 失败: %s" % (" ".join(args), err.strip()))
@@ -167,24 +171,38 @@ def main():
 
         print("提交 %s  %s" % (sha[:10], message.strip().splitlines()[0]))
 
-        diff = git(["diff", "--name-status", "%s..%s" % (parent_sha, sha)], root)
+        # 必须用 -z（NUL 分隔）拿路径：git 默认 core.quotepath=true，
+        # 会把「课程要点.md」这类中文名转义成 "\350\257\276..."，
+        # 这种转义串既喂不回 git show、也传不了 API，必然失败。
+        raw_diff = git(["diff", "--name-status", "-z",
+                        "%s..%s" % (parent_sha, sha)], root)
+        parts = [x for x in raw_diff.split("\0") if x != ""]
         entries = []
-        for line in diff.splitlines():
-            if not line.strip():
-                continue
-            status, path = line.split("\t", 1)
-            path = path.strip()
-            if status.strip().startswith("D"):
-                entries.append({"path": path, "mode": MODE_FILE,
+        i = 0
+        while i < len(parts):
+            status = parts[i].strip()
+            i += 1
+            if status[:1] in ("R", "C"):
+                # 重命名 / 复制：后面跟两个路径（旧、新），删旧 + 写新
+                old, path = parts[i], parts[i + 1]
+                i += 2
+                entries.append({"path": old, "mode": MODE_FILE,
                                 "type": "blob", "sha": None})
-                continue
+            else:
+                path = parts[i]
+                i += 1
+                if status[:1] == "D":
+                    entries.append({"path": path, "mode": MODE_FILE,
+                                    "type": "blob", "sha": None})
+                    print("    %s %s" % (status, path))
+                    continue
             content = git(["show", "%s:%s" % (sha, path)], root, binary=True)
             blob = api("POST", "/repos/%s/%s/git/blobs" % (owner, repo), {
                 "content": base64.b64encode(content).decode("ascii"),
                 "encoding": "base64"})
             entries.append({"path": path, "mode": MODE_FILE,
                             "type": "blob", "sha": blob["sha"]})
-            print("    %s %s" % (status.strip(), path))
+            print("    %s %s" % (status, path))
 
         tree = api("POST", "/repos/%s/%s/git/trees" % (owner, repo),
                    {"base_tree": parent_tree, "tree": entries})
