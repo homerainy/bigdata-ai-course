@@ -213,12 +213,32 @@ git config --global --add safe.directory 'D:/xxx'
 ### 中文文件名显示成 `\346\226\207\344\273\266`
 
 ```bash
+# 只影响显示，改成原始中文（推荐）
 git config --global core.quotepath false
 ```
+
+**⚠️ 别只当它是显示问题** —— 凡是「把 git 输出的路径再喂回 git 或别处」的脚本，都会被这个转义串直接搞崩。
+
+真实案例：`scripts/gh_api_push.py` 用 `git diff --name-status` 取改动文件，遇到 `0917课程要点.md` 拿到的是
+`"homework/scripts/0917\350\257\276\347\250\213\350\246\201\347\202\271.md"`，随后
+`git show <sha>:<该路径>` 报 `fatal: path ... does not exist`，推送中断（本地停留在 `ahead 1`）。
+
+```bash
+# 结论：脚本里解析路径一律用 -z（NUL 分隔），拿到的就是原始 UTF-8 路径
+git diff --name-status -z <base>..<head>
+#   → 输出形如 "A\0path\0A\0path2\0"（重命名是 "R100\0旧路径\0新路径\0"）
+```
+
+配套注意：Windows Python 用 `subprocess(text=True)` 时默认走系统编码（中文系统是 cp936），
+读 git 的 UTF-8 输出会乱码 —— 必须显式 `encoding="utf-8", errors="replace"`。
 
 ### 中文路径操作
 
 Git Bash 下用 `/d/ai学习` 形式即可，`cd`、`git add` 全部正常，无需转义。
+
+**但传给原生 Windows 程序（如 `python.exe`）时必须换写法**：Git Bash 不会自动转换，
+`/d/ai学习/x.py` 会被解释成 `D:\d\ai学习\x.py` 之类的畸形路径，直接报
+`can't open file 'c:\c\Users\...'`。调用原生程序时统一用 `C:/Users/...`（正斜杠）或 `C:\Users\...`。
 
 ---
 
