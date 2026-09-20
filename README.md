@@ -40,7 +40,12 @@ bigdata-ai-course/
 ├── code/                        # 代码与示例
 │   └── hello.py                 # 入门示例
 │
-├── homework/                    # 作业（待填充）
+├── homework/                    # 作业
+│   └── scripts/                 # 第 1 课练习（2026-09-17）
+│       ├── 01.py                # print 基础练习
+│       ├── 01.ipynb             # Jupyter notebook 练习
+│       └── 0917课程要点.md       # 课程要点笔记
+│
 └── projects/                    # 课程项目（待填充）
 ```
 
@@ -79,4 +84,5 @@ python .workbuddy/skills/git-push-local-repo/scripts/git_preflight.py .
 | 2026-09-03 | 初始化仓库，配置开发环境 |
 | 2026-09-05 | 学习 Agent Skill，写一分钟速通笔记 + 测试题 |
 | 2026-09-10 | 添加 concept-learning-generator 概念学习资料生成器 Skill（核心作业） |
+| 2026-09-17 | 第 1 课：Python 环境搭建（3.12.10 + venv）+ print 基础练习，作业归档至 homework/scripts/ |
 | 2026-09-20 | 添加 git-push-local-repo 推送本地仓库技能（含推送前体检脚本） |
